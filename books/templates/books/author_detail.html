@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ author.first_name }} {{ author.last_name }} - Подробнее</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .author-photo {
+            max-width: 200px;
+            max-height: 200px;
+            margin-bottom: 15px;
+        }
+        .author-info {
+            margin-bottom: 10px;
+        }
+        .author-info strong {
+            font-weight: bold;
+        }
+        .actions {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .actions a {
+            margin: 0 10px;
+            color: #007bff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ author.first_name }} {{ author.last_name }}</h1>
+
+        {% if author.photo %}
+            <img src="{{author.photo.url}}" alt="Фото автора" class="author-photo">
+        {% endif %}
+
+        <div class="author-info">
+            <strong>Биография:</strong> {{ author.biography }}
+        </div>
+
+        <div class="actions">
+            <a href="{% url 'author_edit' author.id %}">Редактировать</a>
+            <a href="{% url 'book_list' %}">К списку книг</a>
+        </div>
+    </div>
+</body>
+</html>

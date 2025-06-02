@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список книг</title>
+</head>
+<body style="font-family: Arial, sans-serif; margin: 20px;">
+
+    <div style="max-width: 900px; margin: 0 auto; padding: 20px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 5px;">
+
+        <h1 style="text-align: center; color: #333;">Список книг</h1>
+
+        <h2 style="margin-top: 30px; color: #555;">Книги</h2>
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+            <thead style="background-color: #eee;">
+                <tr>
+                    <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Название</th>
+                    <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Автор</th>
+                    <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Издательство</th>
+                    <th style="padding: 8px; border: 1px solid #ddd; text-align: center;">Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for book in books %}
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd;">{{ book.title }}</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">{{ book.author }}</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">{{ book.publisher }}</td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">
+                        <a href="{% url 'book_detail' book.id %}" style="text-decoration: none; color: #007bff; margin: 0 5px;">Подробнее</a>
+                        <a href="{% url 'book_edit' book.id %}" style="text-decoration: none; color: #28a745; margin: 0 5px;">Изменить</a>
+                        <a href="{% url 'book_delete' book.id %}" style="text-decoration: none; color: #dc3545; margin: 0 5px;">Удалить</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h2 style="margin-top: 30px; color: #555;">Авторы</h2>
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+            <thead style="background-color: #eee;">
+                <tr>
+                    <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Имя</th>
+                    <th style="padding: 8px; border: 1px solid #ddd; text-align: center;">Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for author in authors %}
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd;">{{ author.first_name }} {{ author.last_name }}</td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">
+                        <a href="{% url 'author_detail' author.id %}" style="text-decoration: none; color: #007bff; margin: 0 5px;">Подробнее</a>
+                        <a href="{% url 'author_edit' author.id %}" style="text-decoration: none; color: #28a745; margin: 0 5px;">Изменить</a>
+                        <a href="{% url 'author_delete' author.id %}" style="text-decoration: none; color: #dc3545; margin: 0 5px;">Удалить</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h2 style="margin-top: 30px; color: #555;">Издательства</h2>
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+            <thead style="background-color: #eee;">
+                <tr>
+                    <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Название</th>
+                    <th style="padding: 8px; border: 1px solid #ddd; text-align: center;">Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for publisher in publishers %}
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd;">{{ publisher.name }}</td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">
+                        <a href="{% url 'publisher_detail' publisher.id %}" style="text-decoration: none; color: #007bff; margin: 0 5px;">Подробнее</a>
+                        <a href="{% url 'publisher_edit' publisher.id %}" style="text-decoration: none; color: #28a745; margin: 0 5px;">Изменить</a>
+                        <a href="{% url 'publisher_delete' publisher.id %}" style="text-decoration: none; color: #dc3545; margin: 0 5px;">Удалить</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="{% url 'add_book' %}" style="text-decoration: none; background-color: #007bff; color: white; padding: 8px 12px; border-radius: 5px; margin: 0 5px;">Добавить книгу</a>
+            <a href="{% url 'add_author' %}" style="text-decoration: none; background-color: #007bff; color: white; padding: 8px 12px; border-radius: 5px; margin: 0 5px;">Добавить автора</a>
+            <a href="{% url 'add_publisher' %}" style="text-decoration: none; background-color: #007bff; color: white; padding: 8px 12px; border-radius: 5px; margin: 0 5px;">Добавить издательство</a>
+        </div>
+
+    </div>
+
+</body>
+</html>

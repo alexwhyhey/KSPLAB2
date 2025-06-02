@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавить автора</title>
+</head>
+<body style="font-family: sans-serif; margin: 20px;">
+    <div style="max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ccc; border-radius: 5px;">
+        <h1 style="color: #333; text-align: center;">Добавить автора</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div style="margin-bottom: 15px;">
+                <label for="{{ author_form.first_name.id_for_label }}" style="display: block; font-weight: bold; margin-bottom: 5px;">Имя:</label>
+                {{ author_form.first_name }}
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label for="{{ author_form.last_name.id_for_label }}" style="display: block; font-weight: bold; margin-bottom: 5px;">Фамилия:</label>
+                {{ author_form.last_name }}
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label for="{{ author_form.biography.id_for_label }}" style="display: block; font-weight: bold; margin-bottom: 5px;">Биография:</label>
+                {{ author_form.biography }}
+            </div>
+            <div style="margin-bottom: 20px;">
+                <label for="{{ author_form.photo.id_for_label }}" style="display: block; font-weight: bold; margin-bottom: 5px;">Фото:</label>
+                {{ author_form.photo }}
+            </div>
+            <div style="text-align: center;">
+                <button type="submit" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Сохранить</button>
+                <a href="{% url 'book_list' %}" style="margin-left: 20px; color: #007BFF; text-decoration: none;">К списку книг</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

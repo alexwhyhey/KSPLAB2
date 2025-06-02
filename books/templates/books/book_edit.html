@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактировать книгу</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        input[type="date"],
+        textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        a {
+            margin-left: 10px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .cover-preview {
+            max-width: 200px;
+            max-height: 200px;
+            margin-bottom: 10px;
+        }
+        /* Стиль для стикера */
+        #notification-sticker {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            display: none; /* Скрываем стикер по умолчанию */
+            z-index: 1000;
+        }
+        /* Стили для прелоадера */
+        #loader {
+            display: none;
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+    <script>
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('cover-preview').src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Редактировать книгу</h1>
+        {% if success_message %}
+            <div id="notification-sticker" style="
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background-color: #4CAF50;
+                color: white;
+                padding: 15px;
+                border-radius: 5px;
+                display: block;  /* Сразу отображаем стикер */
+                z-index: 1000;
+            ">
+                {{ success_message }}
+            </div>
+            <script>
+                setTimeout(function() {
+                    document.getElementById('notification-sticker').style.display = 'none';
+                }, 3000); // Скрываем через 3 секунды
+            </script>
+        {% endif %}
+        <form method="post" enctype="multipart/form-data" id="book-form">
+            {% csrf_token %}
+
+            {% for field in book_form %}
+                <div style="margin-bottom: 15px;">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {% if field.name == 'cover' %}
+                        <img id="cover-preview" src="{{ book.cover.url }}" alt="Обложка" class="cover-preview">
+                        {{ field }}
+                        <script>
+                            document.getElementById('{{ field.id_for_label }}').addEventListener('change', function() {
+                                previewImage(this);
+                            });
+                        </script>
+                    {% else %}
+                        {{ field }}
+                    {% endif %}
+                    {% if field.errors %}
+                        <div style="color: red;">{{ field.errors }}</div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            <div style="margin-top: 20px; text-align: center;">
+                <button type="submit">Сохранить</button>
+                <a href="{% url 'book_detail' book.id %}">Отмена</a>
+            </div>
+        </form>
+        <!-- 10 лабораторная ч.3 прелоадер -->
+        <div id="loader">
+            <img src="" alt="Loading..." width="50">
+            <p>Проверка названия...</p>
+        </div>
+    </div>
+    <script>
+        // функция для отображения прелоадера
+        function showLoader() {
+            document.getElementById('loader').style.display = 'block';
+        }
+
+        // функция для скрытия прелоадера
+        function hideLoader() {
+            setTimeout(function() {
+                document.getElementById('loader').style.display = 'none';
+            }, 1000); // задержка 1 секунда
+        }
+
+
+        //10-12 Лабортаторная работа
+        // функция для проверки названия книги
+        function checkTitleAvailability() {
+            const titleInput = document.getElementById('id_title'); //получает название книги из поля ввода
+            const title = titleInput.value;
+            const bookId = '{{ book.id }}';
+            //формирует URL для AJAX-запроса
+            const url = bookId ? '{% url "check_book_title" book.id %}' : '{% url "check_book_title_new" %}';
+            if (!title) {
+                displayTitleError('');
+                return;
+            }
+             // Показываем прелоадер
+            // отправка асинхронного запроса ajax на проверку книги
+            showLoader();
+            $.ajax({
+                url: `${url}?title=${title}`,
+                type: 'GET',
+                dataType: 'json',
+            })
+            .done(function(data) {
+                displayTitleError(data.message);
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+                console.error('Ошибка при проверке названия:', textStatus, errorThrown);
+                displayTitleError('Произошла ошибка при проверке названия.');
+            })
+            .always(function() {
+                 // Скрываем прелоадер в любом случае
+                hideLoader();
+            });
+        }
+
+
+
+
+        //10 лабораторная ч.2
+        // функция отображения/скрытия сообщения об ошибке
+        function displayTitleError(message) {
+            let errorElement = document.getElementById('title-error');
+            if (!errorElement) {
+                errorElement = document.createElement('div');
+                errorElement.id = 'title-error';
+                errorElement.style.color = 'red';
+                const titleLabel = document.querySelector('label[for="id_title"]');
+                if (titleLabel) {
+                    titleLabel.parentNode.insertBefore(errorElement, titleLabel.nextSibling);
+                }
+            }
+            errorElement.textContent = message;
+        }
+        //привязывает функцию к событию input.функция будет вызываться каждый раз, когда пользователь вводит или удаляет символ в поле названия.
+        document.addEventListener('DOMContentLoaded', function() {
+            const titleInput = document.getElementById('id_title');
+            if (titleInput) {
+                titleInput.addEventListener('input', checkTitleAvailability);
+                checkTitleAvailability();
+            }
+        });
+    </script>
+</body>
+</html>

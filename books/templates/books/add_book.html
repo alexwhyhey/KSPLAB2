@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавить книгу</title>
+</head>
+<body style="font-family: sans-serif; margin: 20px;">
+    <div style="max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ccc; border-radius: 5px;">
+        <h1 style="color: #333; text-align: center;">Добавить книгу</h1>
+        {% if error_message %}
+            <p style="color: red;">{{ error_message }}</p>
+        {% endif %}
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h2 style="color: #333;">Книга</h2>
+            <div style="margin-bottom: 15px;">
+                <label for="{{ book_form.title.id_for_label }}" style="display: block; font-weight: bold; margin-bottom: 5px;">{{ book_form.title.label }}</label>
+                {{ book_form.title }}
+            </div>
+
+            {% if book_form.author %}
+                <div style="margin-bottom: 15px;">
+                    <label for="{{ book_form.author.id_for_label }}" style="display: block; font-weight: bold; margin-bottom: 5px;">{{ book_form.author.label }}</label>
+                    {{ book_form.author }}
+                </div>
+            {% endif %}
+
+            {% if book_form.publisher %}
+                <div style="margin-bottom: 15px;">
+                    <label for="{{ book_form.publisher.id_for_label }}" style="display: block; font-weight: bold; margin-bottom: 5px;">{{ book_form.publisher.label }}</label>
+                    {{ book_form.publisher }}
+                </div>
+            {% endif %}
+
+            <div style="margin-bottom: 15px;">
+                <label for="{{ book_form.cover.id_for_label }}" style="display: block; font-weight: bold; margin-bottom: 5px;">{{ book_form.cover.label }}</label>
+                {{ book_form.cover }}
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label for="{{ book_form.publication_date.id_for_label }}" style="display: block; font-weight: bold; margin-bottom: 5px;">{{ book_form.publication_date.label }}</label>
+                <input type="date"
+                       name="{{ book_form.publication_date.html_name }}"
+                       id="{{ book_form.publication_date.id_for_label }}"
+                       value="{{ book_form.publication_date.value|date:'Y-m-d' }}"
+                       style="padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; width: 200px;">
+            </div>
+            <h2 style="color: #333;">Подтверждение</h2>
+            {{ confirmation_form.as_p }}
+            <div style="text-align: center;">
+                <button type="submit" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Сохранить</button>
+                <a href="{% url 'book_list' %}" style="margin-left: 20px; color: #007BFF; text-decoration: none;">Просмотреть список книг</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

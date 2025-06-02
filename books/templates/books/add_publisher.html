@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавить издательство</title>
+    <style>
+        /* Стили для затемнения фона модального окна */
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный черный */
+            z-index: 999;
+            display: none;
+        }
+
+        /* Стили для модального окна (уведомления) */
+        #modal-notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #f44336; /* Красный цвет для ошибки */
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            z-index: 1000;
+            display: none;
+            text-align: center;
+        }
+
+        #modal-notification .close-button {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body style="font-family: sans-serif; margin: 20px;">
+    <div id="overlay" style="display: {% if show_modal %}block{% else %}none{% endif %};"></div>
+    <div id="modal-notification" style="display: {% if show_modal %}block{% else %}none{% endif %};">
+        <span class="close-button" onclick="closeModal()">&times;</span>
+        <p>{% if error_message %}{{ error_message }}{% else %}Произошла ошибка{% endif %}</p>
+    </div>
+    <div style="max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ccc; border-radius: 5px;">
+        <h1 style="color: #333; text-align: center;">Добавить издательство</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div style="margin-bottom: 15px;">
+                <label for="{{ publisher_form.name.id_for_label }}" style="display: block; font-weight: bold; margin-bottom: 5px;">Название:</label>
+                {{ publisher_form.name }}
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label for="{{ publisher_form.address.id_for_label }}" style="display: block; font-weight: bold; margin-bottom: 5px;">Адрес:</label>
+                {{ publisher_form.address }}
+            </div>
+            <div style="margin-bottom: 20px;">
+                <label for="{{ publisher_form.logo.id_for_label }}" style="display: block; font-weight: bold; margin-bottom: 5px;">Логотип:</label>
+                {{ publisher_form.logo }}
+            </div>
+            <div style="text-align: center;">
+                <button type="submit" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Сохранить</button>
+                <a href="{% url 'book_list' %}" style="margin-left: 20px; color: #007BFF; text-decoration: none;">К списку книг</a>
+            </div>
+        </form>
+    </div>
+    <script>
+        function closeModal() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('modal-notification').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ book.title }} - Подробнее</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .book-cover {
+            max-width: 200px;
+            max-height: 200px;
+            margin-bottom: 15px;
+        }
+        .book-info {
+            margin-bottom: 10px;
+        }
+        .book-info strong {
+            font-weight: bold;
+        }
+        .actions {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .actions a {
+            margin: 0 10px;
+            color: #007bff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="color: #333; text-align: center;">{{ book.title }}</h1>
+
+        {% if book.cover %}
+            <img src="{{book.cover.url}}" alt="Обложка" class="book-cover">
+        {% endif %}
+
+        <div class="book-info">
+            <strong>Автор:</strong> {{ book.author }}
+        </div>
+
+        <div class="book-info">
+            <strong>Издательство:</strong> {{ book.publisher }}
+        </div>
+
+        <div class="book-info">
+            <strong>Дата публикации:</strong> {{ book.publication_date|date:"d.m.Y" }}
+        </div>
+
+        <div class="actions">
+            <a href="{% url 'book_edit' book.id %}">Редактировать</a>
+            <a href="{% url 'book_list' %}">К списку книг</a>
+        </div>
+    </div>
+</body>
+</html>

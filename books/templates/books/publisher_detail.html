@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ publisher.name }} - Подробнее</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .publisher-logo {
+            max-width: 200px;
+            max-height: 200px;
+            margin-bottom: 15px;
+        }
+        .publisher-info {
+            margin-bottom: 10px;
+        }
+        .publisher-info strong {
+            font-weight: bold;
+        }
+        .actions {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .actions a {
+            margin: 0 10px;
+            color: #007bff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ publisher.name }}</h1>
+
+        {% if publisher.logo %}
+            <img src="{{publisher.logo.url}}" alt="Логотип издательства" class="publisher-logo">
+        {% endif %}
+
+        <div class="publisher-info">
+            <strong>Адрес:</strong> {{ publisher.address }}
+        </div>
+
+        <div class="actions">
+            <a href="{% url 'publisher_edit' publisher.id %}">Редактировать</a>
+            <a href="{% url 'book_list' %}">К списку книг</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактировать издательство</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+        }
+        .publisher-logo {
+            max-width: 200px;
+            max-height: 200px;
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        a {
+            margin-left: 10px;
+            color: #007bff;
+            text-decoration: none;
+        }
+    </style>
+    <script>
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('logo-preview').src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Редактировать издательство</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {% for field in publisher_form %}
+                <div style="margin-bottom: 15px;">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {% if field.name == 'logo' %}
+                        {% if publisher.logo %}
+                            <img id="logo-preview" src="{{ publisher.logo.url }}" alt="Логотип издательства" class="publisher-logo">
+                        {% else %}
+                            <img id="logo-preview" src="" alt="Предварительный просмотр" class="publisher-logo" style="display: none;">
+                        {% endif %}
+                        {{ field }}
+                        <script>
+                            document.getElementById('{{ field.id_for_label }}').addEventListener('change', function() {
+                                previewImage(this);
+                            });
+                        </script>
+                    {% else %}
+                        {{ field }}
+                    {% endif %}
+                    {% if field.errors %}
+                        <div style="color: red;">{{ field.errors }}</div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            <div style="margin-top: 20px; text-align: center;">
+                <button type="submit">Сохранить</button>
+                <a href="{% url 'publisher_detail' publisher.id %}">Отмена</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
