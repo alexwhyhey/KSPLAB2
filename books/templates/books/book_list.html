@@ -1,9 +1,12 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Список книг</title>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
 </head>
 <body style="font-family: Arial, sans-serif; margin: 20px;">
 
@@ -28,7 +31,14 @@
                     <td style="padding: 8px; border: 1px solid #ddd;">{{ book.author }}</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">{{ book.publisher }}</td>
                     <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">
-                        <a href="{% url 'book_detail' book.id %}" style="text-decoration: none; color: #007bff; margin: 0 5px;">Подробнее</a>
+                        <a  href="#"
+                            class="open-book-modal"
+                            data-title="{{ book.title }}"
+                            data-author="{{ book.author }}"
+                            data-publisher="{{ book.publisher }}"
+                            data-date="{{ book.publication_date|date:'d.m.Y' }}"
+                            data-cover-url="{{ book.cover.url }}"
+                            style="text-decoration: none; color: #007bff; margin: 0 5px;">Подробнее</a>
                         <a href="{% url 'book_edit' book.id %}" style="text-decoration: none; color: #28a745; margin: 0 5px;">Изменить</a>
                         <a href="{% url 'book_delete' book.id %}" style="text-decoration: none; color: #dc3545; margin: 0 5px;">Удалить</a>
                     </td>
@@ -50,7 +60,12 @@
                 <tr>
                     <td style="padding: 8px; border: 1px solid #ddd;">{{ author.first_name }} {{ author.last_name }}</td>
                     <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">
-                        <a href="{% url 'author_detail' author.id %}" style="text-decoration: none; color: #007bff; margin: 0 5px;">Подробнее</a>
+                        <a  href="#"
+                            class="open-author-modal"
+                            data-name="{{ author.first_name }} {{ author.last_name }}"
+                            data-biography="{{ author.biography }}"
+                            data-photo-url="{{ author.photo.url }}"
+                        style="text-decoration: none; color: #007bff; margin: 0 5px;">Подробнее</a>
                         <a href="{% url 'author_edit' author.id %}" style="text-decoration: none; color: #28a745; margin: 0 5px;">Изменить</a>
                         <a href="{% url 'author_delete' author.id %}" style="text-decoration: none; color: #dc3545; margin: 0 5px;">Удалить</a>
                     </td>
@@ -72,7 +87,12 @@
                 <tr>
                     <td style="padding: 8px; border: 1px solid #ddd;">{{ publisher.name }}</td>
                     <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">
-                        <a href="{% url 'publisher_detail' publisher.id %}" style="text-decoration: none; color: #007bff; margin: 0 5px;">Подробнее</a>
+                        <a  href="#"
+                            class="open-publisher-modal"
+                            data-name="{{ publisher.name }}"
+                            data-address="{{ publisher.address }}"
+                            data-logo-url="{{ publisher.logo.url }}"
+                            style="text-decoration: none; color: #007bff; margin: 0 5px;">Подробнее</a>
                         <a href="{% url 'publisher_edit' publisher.id %}" style="text-decoration: none; color: #28a745; margin: 0 5px;">Изменить</a>
                         <a href="{% url 'publisher_delete' publisher.id %}" style="text-decoration: none; color: #dc3545; margin: 0 5px;">Удалить</a>
                     </td>
@@ -87,6 +107,39 @@
             <a href="{% url 'add_publisher' %}" style="text-decoration: none; background-color: #007bff; color: white; padding: 8px 12px; border-radius: 5px; margin: 0 5px;">Добавить издательство</a>
         </div>
 
+    </div>
+
+    <button id="scrollToTopBtn" onclick="scrollToTop()">Наверх</button>
+    <script src="{% static 'js/main.js' %}"></script>
+
+    <!-- Модальное окно книги -->
+    <div id="bookModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modalTitle"></h2>
+            <img id="modalCover" src="" alt="Обложка" style="max-width: 200px; max-height: 200px; margin-bottom: 15px;">
+            <p><strong>Автор:</strong> <span id="modalAuthor"></span></p>
+            <p><strong>Издательство:</strong> <span id="modalPublisher"></span></p>
+            <p><strong>Дата публикации:</strong> <span id="modalDate"></span></p>
+        </div>
+    </div>
+
+    <div id="publisherModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modalName"></h2>
+            <img id="modalLogo" src="" alt="Логотип" style="max-width: 200px; max-height: 200px; margin-bottom: 15px;">
+            <p><strong>Адрес:</strong> <span id="modalAddress"></span></p>
+        </div>
+    </div>
+
+    <div id="authorModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modalAuthorName"></h2>  <!-- Было modalName -->
+            <img id="modalAuthorPhoto" src="" alt="Фото автора" style="max-width: 200px; margin-bottom: 15px;">
+            <p><strong>Биография:</strong> <span id="modalAuthorBio"></span></p>
+        </div>
     </div>
 
 </body>
