@@ -10,7 +10,9 @@
 </head>
 <body style="font-family: Arial, sans-serif; margin: 20px;">
 
-    <div style="max-width: 900px; margin: 0 auto; padding: 20px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 5px;">
+    <div style="max-width: 900px; margin: 0 auto; padding: 20px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 5px; background-size: cover; background-position: center; transition: background-image 1s ease;">
+    
+    
 
         <h1 style="text-align: center; color: #333;">Список книг</h1>
 
@@ -112,7 +114,7 @@
     <button id="scrollToTopBtn" onclick="scrollToTop()">Наверх</button>
     <script src="{% static 'js/main.js' %}"></script>
 
-    <!-- Модальное окно книги -->
+
     <div id="bookModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -136,11 +138,32 @@
     <div id="authorModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2 id="modalAuthorName"></h2>  <!-- Было modalName -->
+            <h2 id="modalAuthorName"></h2>
             <img id="modalAuthorPhoto" src="" alt="Фото автора" style="max-width: 200px; margin-bottom: 15px;">
             <p><strong>Биография:</strong> <span id="modalAuthorBio"></span></p>
         </div>
     </div>
 
+    <div id="toastContainer" style="position: fixed; top: 20px; right: 20px; z-index: 4000;"></div>
+
 </body>
+
+
+<div id="slidePanel" class="slide-panel">
+    <div class="slide-panel-tab">Картинки</div>
+    <div class="slide-panel-content">
+        <h3>Перейти к картинкам?</h3>
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="{% url 'image_page' %}" style="text-decoration: none; background-color: #007bff; color: white; padding: 8px 12px; border-radius: 5px; margin: 0 5px;">Перейти</a>
+            <button onclick="toggleSlidePanel()" style="background-color: #6c757d; color: white; padding: 8px 12px; border: none; border-radius: 5px; margin: 0 5px; cursor: pointer;">Отмена</button>
+        </div>
+    </div>
+</div>
+
+{% for message in messages %}
+    <script>
+        showToast("{{ message }}", "{{ message.tags }}");
+    </script>
+{% endfor %}
+
 </html>

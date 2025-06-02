@@ -4,6 +4,7 @@ from .models import Author, Publisher, Book
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from .models import Book
+from django.contrib import messages
 
 
 def add_book(request):
@@ -72,6 +73,7 @@ def book_delete(request, book_id):
     book = get_object_or_404(Book, pk=book_id)
     book.removed = True
     book.save()
+    messages.success(request, 'Книга удалена.')
     return redirect('book_list')
 
 
@@ -79,6 +81,7 @@ def author_delete(request, author_id):
     author = get_object_or_404(Author, pk=author_id)
     author.removed = True
     author.save()
+    messages.success(request, 'Автор удален.')
     return redirect('book_list')
 
 
@@ -86,6 +89,7 @@ def publisher_delete(request, publisher_id):
     publisher = get_object_or_404(Publisher, pk=publisher_id)
     publisher.removed = True
     publisher.save()
+    messages.success(request, 'Издательство удалено.')
     return redirect('book_list')
 
 
@@ -169,3 +173,6 @@ def check_book_title(request, book_id=None):
         # Книги с таким названием не существует, название доступно
         return JsonResponse({'available': True, 'message': 'Название доступно'})
 
+
+def image_page(request):
+    return render(request, 'books/image_change.html')

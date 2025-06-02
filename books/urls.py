@@ -18,4 +18,5 @@ urlpatterns = [
     path('add_publisher/', views.add_publisher, name='add_publisher'),
     path('check_book_title/<int:book_id>/', views.check_book_title, name='check_book_title'), #  URL для проверки (с book_id)
     path('check_book_title/', views.check_book_title, name='check_book_title_new'), # URL для проверки при добавлении новой книги
+    path('image_page/', views.image_page, name='image_page'),
 ]

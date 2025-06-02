@@ -52,3 +52,101 @@
 .close:hover {
     color: black;
 }
+
+.toast {
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    animation: slideIn 0.5s, fadeOut 0.5s 2.5s;
+    animation-fill-mode: forwards;
+    max-width: 300px;
+    opacity: 0;
+}
+
+.toast.success {
+    background-color: #28a745;
+}
+
+.toast.error {
+    background-color: #dc3545;
+}
+
+.toast.info {
+    background-color: #17a2b8;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+
+
+/* Выдвигающаяся панель */
+.slide-panel {
+    position: fixed;
+    right: -250px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 300px;
+    height: auto;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 5px 0 0 5px;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+    transition: right 0.3s ease;
+    z-index: 1000;
+}
+
+.slide-panel-tab {
+    position: absolute;
+    left: -40px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 100px;
+    background-color: #007bff;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px 0 0 5px;
+    cursor: pointer;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-weight: bold;
+}
+
+.slide-panel-content {
+    padding: 20px;
+    display: none;
+}
+
+.slide-panel.open {
+    right: 0;
+}
+
+.slide-panel.open .slide-panel-content {
+    display: block;
+}
+
+.main-container {
+    width: 500px;
+    height: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-size: cover;
+    background-position: center;
+    transition: background-image 1s ease;
+    background-image: linear-gradient(rgba(249, 249, 249, 0.9), rgba(249, 249, 249, 0.9));
+}
